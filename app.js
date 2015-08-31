@@ -10,6 +10,10 @@ var users = require('./routes/users');
 
 var app = express();
 
+// get node to connect with 'crowdlines' db on startup
+var mongoose = require( 'mongoose' );
+mongoose.connect( 'mongodb://localhost/crowdlines' );
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
