@@ -16,6 +16,8 @@ require( 'mongoose' ).model
         body: String,
         author: String,
         upvotes: { type: Number, default: 0 },
+            
+        // please note that we are makeing a reference back to the 'Post' objecyt form here
         post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' }
     }) 
 );
