@@ -15,7 +15,7 @@
 // please note that we could have used the regular 'ngRoute' module, but
 // ui-router is newer and provides more flexibility and features 
 // please note the ngRoute us based on URLs whereas ui-router is based on states
-var app = angular.module( "crowdlines", [ "ui.router" ] );
+var app = angular.module( 'crowdlines', [ 'ui.router' ] );
 
 
 // Angular config() function used to setup a home state
@@ -35,30 +35,30 @@ app.config
             // entire list of posts
             .state
             (
-                "home",
+                'home',
                 {
-                    url: "/home",
-                    templateUrl: "/home.html",
-                    controller: "MainCtrl"
+                    url: '/home',
+                    templateUrl: '/home.html',
+                    controller: 'MainCtrl'
                 }
             )
 
             // individual post page (w/ comments)
             .state
             (
-                "posts",
+                'posts',
                 {
                     // what's within the curley brackets is the dynamic part of the url
                     // also known as the route 'parameter', it can alternatively be written as "/post/:id"
-                    url: "/posts/{id}",
-                    templateUrl: "/posts.html",
+                    url: '/posts/{id}',
+                    templateUrl: '/posts.html',
                     controller: 'PostsCtrl'
                 }
             );
             
 
         // other routes (unspecified) will be directed to "home"
-        $urlRouterProvider.otherwise( "home" );
+        $urlRouterProvider.otherwise( 'home' );
     }
 );
 
@@ -74,7 +74,7 @@ app.config
 app.factory
 ( 
     // factory ID
-    "posts",
+    'posts',
     function() 
     {
         // please note that we could have simply return posts,
@@ -84,11 +84,11 @@ app.factory
         {
             posts: 
             [
-                { title: "Post 1", link: "#", upvotes: 5, comments: [] },
-                { title: "Post 2", link: "#", upvotes: 2, comments: [] },
-                { title: "Post 3", link: "#", upvotes: 5, comments: [] },
-                { title: "Post 4", link: "#", upvotes: 9, comments: [] },
-                { title: "Post 5", link: "#", upvotes: 4, comments: [] }
+                { title: 'Post 1', link: '#', upvotes: 5, comments: [] },
+                { title: 'Post 2', link: '#', upvotes: 2, comments: [] },
+                { title: 'Post 3', link: '#', upvotes: 5, comments: [] },
+                { title: 'Post 4', link: '#', upvotes: 9, comments: [] },
+                { title: 'Post 5', link: '#', upvotes: 4, comments: [] }
             ]
         };
         
@@ -108,7 +108,7 @@ app.factory
 app.controller
 (
     // controller ID
-    "MainCtrl", 
+    'MainCtrl', 
     
     // angular helps to wire this with the appropriate factory based on the factory ID 'posts'
     function( $scope, posts )
@@ -137,15 +137,15 @@ app.controller
         {   
             // prevent an empty post title from being submitted,
             // please note 'link' on the other hand is NOT compulsary
-            if ( !$scope.title || $scope.title === "" )
+            if ( !$scope.title || $scope.title === '' )
             {
                 return;
             }
             
             // this is to prevent page reloading on empty links
-            if ( !$scope.link || $scope.link === "" )
+            if ( !$scope.link || $scope.link === '' )
             {
-                $scope.link = "#";
+                $scope.link = '#';
             }
             
             // this simple adds a new post with hardcoded values
@@ -162,8 +162,8 @@ app.controller
             
             // and this will allow the bound title input to be cleared at this point
             // please note that we have already captured the title above
-            $scope.title = "";
-            $scope.link = "";
+            $scope.title = '';
+            $scope.link = '';
         };
         
         
@@ -213,7 +213,7 @@ app.controller
 // Individual post item controller, that will be directly connected with the 'post (w/ comments)' view
 app.controller
 (
-    "PostsCtrl",
+    'PostsCtrl',
     
     // apart from $scope, we want to be able to access...
     // ... post id using '$stateParams'
@@ -232,7 +232,7 @@ app.controller
         $scope.addComment = function()
         {
             // empty comment should not push anything
-            if ( !$scope.comment || $scope.comment === "" )
+            if ( !$scope.comment || $scope.comment === '' )
             {
                 return;
             }
@@ -242,12 +242,12 @@ app.controller
             $scope.post.comments.push
             ({ 
                 body: $scope.comment, 
-                author: "Joe", 
+                author: 'Joe', 
                 upvotes: 0
             });
             
             // to clear field after submission
-            $scope.comment = "";
+            $scope.comment = '';
         };
     }
 );
@@ -263,7 +263,7 @@ app.controller
 
 app.filter
 ( 
-    "capitalise", 
+    'capitalise', 
     function()
     {
         return function( text )
