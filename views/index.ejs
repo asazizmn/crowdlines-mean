@@ -1,11 +1,121 @@
 <!DOCTYPE html>
+
+<!--
+    index.html - crowdlines
+    main template file of the crowdlines social news site
+
+    Aziz | 18 Aug 2015
+-->
+
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+    <head>
+        <title>Crowdlines | A Social News Site</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+        
+        <!-- AngularJS CDN -->
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script>
+        
+        <!-- AngularJS UI-Router CDN -->
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
+        <script src="app.js"></script>
+        
+        <style> 
+            .glyphicon { margin-right: 3px; }
+            .glyphicon-thumbs-up { cursor:pointer } 
+            .inline-block { display: inline-block }
+            .meta-info { color: #aaa }
+            .valign-middle { vertical-align: middle }
+        </style>
+    </head>
+    
+    <!-- this will be linked to the 'crowdlines' module and 'MainCtrl' controller defined within app.js -->
+    <body ng-app="crowdlines">
+        
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
+                <!-- this is where the active view will be placed, please note 
+                that we have removed ng-controller="MainCtrl" from body tag
+                it used to map to the controller $scope -->
+                <ui-view></ui-view>
+            </div>
+        </div>
+        
+        <!-- inline template - home -->
+        <script type="text/ng-template" id="/home.html">
+            <div class="page-header">
+                <h1>Crowdlines</h1>
+                <h4>A Social News Site</h4>
+            </div>
+
+            <div class="form-group"><input class="form-control" type="text" placeholder="Search" ng-model="search"></div>
+
+            <!-- please note 'upvotes' vs '-upvotes' is ascending and descending --> 
+            <div ng-repeat="post in posts | orderBy: '-upvotes' | filter: search" style="border-bottom: 1px solid #f5f5f5; padding: 5px 0;">
+
+                <!-- the following is equivalent to ng-bind i.e. <span ng-bind="post.title"></span> -->
+                <div class="inline-block" style="width: 69%">
+                    <a href="{{ post.link }}" style="text-decoration: none; font-size: 20px; margin-left: 10px;">{{ post.title }}</a>
+                </div>
+                
+                <!-- passing back a direct reference to the post in relevance -->
+                <div class="inline-block meta-info" style="width: 14%">
+                    <span class="glyphicon glyphicon-thumbs-up" ng-click="upTheVotes( post )"></span>
+                    {{ post.upvotes }}
+                </div>
+                
+                <!-- please note that '$index' is implicitly available within ng-repeat block --> 
+                <div class="inline-block meta-info" style="width: 14%">
+                    <a href="#/posts/{{ $index }}" class="valign-middle">
+                        <span class="glyphicon glyphicon-comment meta-info"></span>
+                    </a>
+                    {{ post.comments.length }}
+                </div>
+                
+            </div>
+
+            <!-- please note that one added benefit of using the 'ng-submit' directive, 
+            is that the form can be submitted simply by pressing 'enter' -->
+            <form ng-submit="addPost()" style="margin-top: 30px;">
+
+                <h4>Add a new post</h4>
+
+                <!-- ng-model allows the value of this input to be bounded to $scope
+                and so the controller will now be able to access this by $scope.title -->
+                <div class="form-group"><input class="form-control" type="text" placeholder="Title" ng-model="title"></div>
+                <div class="form-group"><input class="form-control" type="text" placeholder="URL" ng-model="link"></div>
+                <button type="submit" class="btn btn-primary">Post</button>
+        
+            </form>
+        </script>
+        
+        
+        <!-- inline template - post -->
+        <script type="text/ng-template" id="/posts.html">
+            <div class="page-header">
+                <a href="{{ post.link }}">{{ post.title }}</a>
+            </div>
+
+            <div ng-repeat="comment in post.comments | orderBy: '-upvotes'">
+
+                <span class="glyphicon glyphicon-thumbs-up" ng-click="upTheVotes( comment )"></span>
+                {{ comment.upvotes }} - by {{ comment.author }}
+
+                <span style="font-size: 20px; margin-left: 10px;">
+                {{ comment.body }}
+                </span>
+                
+            </div>
+    
+            <!-- form to add new comments -->
+            <form ng-submit="addComment()" style="margin-top: 30px">
+                <h4>Add a new comment</h4>
+                <div class="form-group"><input class="form-control" type="text" placeholder="Comment" ng-model="comment"></div>
+                <button type="submit" class="btn btn-primary">Post</button>
+            </form>
+        </script>
+        
+    </body>
 </html>
