@@ -5,6 +5,8 @@
  *  Aziz | 31 Aug 2015
  */
 
+
+// import global 'mongoose' object
 var mongoose = require( 'mongoose' );
 
 // definition of the 'Post' schema

@@ -5,6 +5,9 @@
  *  Aziz | 31 Aug 2015
  */
 
+
+// please note the use of 'require' which is a node based keyword,
+// and not recognised by regular javascript dom
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -17,8 +20,17 @@ var users = require('./routes/users');
 
 var app = express();
 
+//
 // get node to connect with 'crowdlines' db on startup
+//
+
+// import global mongoose object
 var mongoose = require( 'mongoose' );
+
+// register the 'Posts'.js file w/ mongoose, so that the 'Post' object cab be...
+// ... used anywhere the mongoose object is imported
+require( './models/Posts' );
+
 mongoose.connect( 'mongodb://localhost/crowdlines' );
 
 // view engine setup
