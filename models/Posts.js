@@ -17,6 +17,8 @@ var PostSchema = new mongoose.Schema
     upvotes: { type: Number, default: 0 },
         
     // basically an array of 'Comment' references
+    // this will allow us to use the built-in mongoose 'populate()' method to 
+    // easily retrieve all comments associated with a post
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }]
 });
 
