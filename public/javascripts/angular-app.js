@@ -1,8 +1,8 @@
 /* 
-    app.js - crowdlines
-    contains the main angularjs logic
-
-    Aziz | 18 Aug 2015
+ *  angular-app.js - crowdlines
+ *  contains the main angularjs logic
+ *  
+ *  Aziz | 18 Aug 2015
  */
 
 

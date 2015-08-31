@@ -1,3 +1,10 @@
+/* 
+ *  app.js - crowdlines
+ *  contains the main node.js configurations
+ *  
+ *  Aziz | 31 Aug 2015
+ */
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
