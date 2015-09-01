@@ -27,9 +27,10 @@ var app = express();
 // import global mongoose object
 var mongoose = require( 'mongoose' );
 
-// register the 'Posts'.js file w/ mongoose, so that the 'Post' object cab be...
-// ... used anywhere the mongoose object is imported
+// register the 'Posts'.js and other model files w/ mongoose, 
+// so that the 'Post' object cab be used anywhere the mongoose object is imported
 require( './models/Posts' );
+require( './models/Comments' );
 
 mongoose.connect( 'mongodb://localhost/crowdlines' );
 
