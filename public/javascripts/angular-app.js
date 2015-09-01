@@ -249,6 +249,11 @@ app.controller
             // to clear field after submission
             $scope.comment = '';
         };
+        
+        $scope.upTheVotes = function( comment )
+        {
+            comment.upvotes += 1;
+        };
     }
 );
 
