@@ -43,7 +43,7 @@ router.get( '/posts', function( req, res, next )
 
 
 /*  POST (i.e. create) a new post object */
-// please note that this router.post is to do with GET/POST not crowlines 'post' 
+// please note that this router.post is to do with POST request, not crowdlines 'post'
 // so basically when POST has request URL '/posts', create a new object and save to db
 router.post( '/posts', function( req, res, next )
 {
