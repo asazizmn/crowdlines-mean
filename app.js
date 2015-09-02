@@ -15,24 +15,30 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+
+//
+// get node to connect with 'crowdlines' db on startup
+// pls nt that this segment has to be placed before the 'require('./routes/index')' statement
+// this is because it refers to 'index.js' and this references 'Posts' and 'comments',
+// which must be defined before they are used
+//
+
+// import global mongoose object and connect to mongoDB
+var mongoose = require( 'mongoose' );
+mongoose.connect( 'mongodb://localhost/crowdlines' );
+
+// register the 'Posts'.js and other model files w/ mongoose, 
+// so that the 'Post' object can be used anywhere the mongoose object is imported
+require( './models/Posts' );
+require( './models/Comments' );
+
+//////
+
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
-
-//
-// get node to connect with 'crowdlines' db on startup
-//
-
-// import global mongoose object
-var mongoose = require( 'mongoose' );
-
-// register the 'Posts'.js and other model files w/ mongoose, 
-// so that the 'Post' object cab be used anywhere the mongoose object is imported
-require( './models/Posts' );
-require( './models/Comments' );
-
-mongoose.connect( 'mongodb://localhost/crowdlines' );
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
