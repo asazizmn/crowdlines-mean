@@ -66,5 +66,41 @@ router.post( '/posts', function( req, res, next )
     });
 });
 
+// instead of replicating code within various request handlers that need to 
+// load a post object, Express's param() method has been utilised
+// now everytime a route URL containing :post is defined, express will run this first
+// this basically retrieves the post object from the db and attaches it to 'req'
+router.param( 'post', function( req, res, next, id )
+{
+   var query = Post.findById( id );
+   
+   // mongoose's query interface (http://mongoosejs.com/docs/queries.html)
+   query.exec( function( err, post )
+   {
+      if ( err )
+      {
+          return next( err );
+      }
+      
+      if ( !post )
+      {
+          return next( new Error( 'can\'t finf post' ));
+      }
+      
+      req.post = post;
+      return next();
+   });
+   
+});
+
+
+/* GET a single post object, given the ID */
+// please note that :post is the ID, that will be passed to the above method and
+// have the resulting post object attached to 'req'
+router.get( '/posts/:post', function( req, res )
+{
+    res.json( req.post );
+});
+
 
 module.exports = router;
