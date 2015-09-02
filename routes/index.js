@@ -8,7 +8,8 @@ var Post = mongoose.model( 'Post' );
 var Comment = mongoose.model( 'Comment' );
 
 
-/* GET home page. */
+/* GET home page */
+// this is what causes 'localhost:3000' to load index.html
 router.get( '/', function( req, res, next )
 {
     res.render
