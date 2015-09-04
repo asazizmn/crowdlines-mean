@@ -24,4 +24,14 @@ var PostSchema = new mongoose.Schema
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }]
 });
 
+
+// simple method to add one to the upvote count and then save it
+// please refer to http://mongoosejs.com/docs/guide.html for more details
+PostSchema.methods.upvote = function( callback )
+{
+    this.upvotes += 1;
+    this.save( callback );
+};
+
+
 mongoose.model( 'Post', PostSchema );

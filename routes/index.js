@@ -70,23 +70,22 @@ router.post( '/posts', function( req, res, next )
 // this basically retrieves the post object from the db and attaches it to 'req'
 router.param( 'post', function( req, res, next, id )
 {
-   // mongoose's query interface (http://mongoosejs.com/docs/queries.html)
-   Post.findById( id ).exec( function( err, post )
-   {
-      if ( err )
-      {
-          return next( err );
-      }
+    // mongoose's query interface (http://mongoosejs.com/docs/queries.html)
+    Post.findById( id ).exec( function( err, post )
+    {
+        if ( err )
+        {
+            return next( err );
+        }
       
-      if ( !post )
-      {
-          return next( new Error( 'can\'t finf post' ));
-      }
+        if ( !post )
+        {
+            return next( new Error( 'can\'t finf post' ));
+        }
       
-      req.post = post;
-      return next();
-   });
-   
+        req.post = post;
+        return next();
+    });
 });
 
 
@@ -97,6 +96,24 @@ router.get( '/posts/:post', function( req, res )
 {
     res.json( req.post );
 });
+
+
+/* Update the post upvote count, using HTTP PUT */
+// please note how this route will firstly use the above param method
+// to pre-load the appropriate post given the id
+router.put( '/posts/:post/upvote', function( req, res, next )
+{
+    req.post.upvote( function( err, post )
+    {
+        if ( err )
+        {
+            return next( err );
+        };
+        
+        res.json( post );
+    });
+});
+
 
 
 module.exports = router;
