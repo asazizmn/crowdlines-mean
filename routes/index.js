@@ -49,10 +49,8 @@ router.get( '/posts', function( req, res, next )
 router.post( '/posts', function( req, res, next )
 {
     // creating new post object in memory
-    var post = new Post( req.body );
-
     // and then saving it to the db
-    post.save( function( err, post )
+    new Post( req.body ).save( function( err, post )
     {
         if ( err )
         {
@@ -72,10 +70,8 @@ router.post( '/posts', function( req, res, next )
 // this basically retrieves the post object from the db and attaches it to 'req'
 router.param( 'post', function( req, res, next, id )
 {
-   var query = Post.findById( id );
-   
    // mongoose's query interface (http://mongoosejs.com/docs/queries.html)
-   query.exec( function( err, post )
+   Post.findById( id ).exec( function( err, post )
    {
       if ( err )
       {
