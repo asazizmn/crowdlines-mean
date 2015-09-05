@@ -188,8 +188,9 @@ router.param( 'comment', function( req, res, next, id )
 
 
 /* Update the comment upvote count, using HTTP PUT */
-// please note how this route will firstly use the above param methods
-// to pre-load the appropriate post and comment given the ids
+// please note how this route will firstly pre-load use the 'post' param to retrieve
+// the right set of comments and then it will use the 'comment' param method to load the
+// correct comment to upvote from the list of comments from the pre-loaded post object
 router.put( '/posts/:post/comments/:comment/upvote', function( req, res, next )
 {
     req.comment.upvote( function( err, comment )
