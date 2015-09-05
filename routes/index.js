@@ -157,6 +157,7 @@ router.post( '/posts/:post/comments', function( req, res, next )
                 return next( err );
             }
             
+            // returning the actual comment as part of the response
             res.json( comment );
         });
         
