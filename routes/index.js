@@ -139,7 +139,7 @@ router.post( '/posts/:post/comments', function( req, res, next )
     comment.post = req.post;
      
     // and then saving it to the db
-    comment.save( function( err, post )
+    comment.save( function( err, comment )
     {
         if ( err )
         {
