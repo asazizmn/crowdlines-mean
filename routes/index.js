@@ -99,11 +99,23 @@ router.param( 'post', function( req, res, next, id )
 
 
 /* GET a single post object, given the ID */
-// please note that :post is the ID, that will be passed to the above method and
+// please note that :post is the ID, that will be passed to the above param method and
 // have the resulting post object attached to 'req'
+// but apart from the we using the 'populate' method to automatically load the associated comments
 router.get( '/posts/:post', function( req, res )
 {
-    res.json( req.post );
+    // please note that the 'populate' method will automatically load the associated methods
+    // in the following we are just providing a callback function to execute once the comments are loaded
+    // so in our case we are just returning the post object via the response
+    req.post.populate( 'comments', function( err, post )
+    {
+        if ( err )
+        {
+            return next( err );
+        };
+        
+        res.json( req.post );
+    });
 });
 
 
