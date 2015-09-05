@@ -114,7 +114,7 @@ router.get( '/posts/:post', function( req, res )
             return next( err );
         };
         
-        res.json( req.post );
+        res.json( post );
     });
 });
 
