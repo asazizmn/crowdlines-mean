@@ -8,6 +8,10 @@ var Post = mongoose.model( 'Post' );
 var Comment = mongoose.model( 'Comment' );
 
 
+//
+// General Routes
+//
+
 /* GET home page */
 // this is what causes 'localhost:3000' to load index.html
 router.get( '/', function( req, res, next )
@@ -21,6 +25,11 @@ router.get( '/', function( req, res, next )
     );
 });
 
+
+
+//
+// Post Routes
+//
 
 /* GET a JSON list of posts */
 // using the express 'get' method,
@@ -114,6 +123,45 @@ router.put( '/posts/:post/upvote', function( req, res, next )
     });
 });
 
+
+
+//
+// Comment Routes
+//
+
+/* POST a new comment for a particular post */
+router.post( '/posts/:post/comments', function( req, res, next ) 
+{
+    // creating new post object in memory
+    var comment = new Comment( req.body ); 
+    
+    // and linking parent post to it
+    comment.post = req.post;
+     
+    // and then saving it to the db
+    comment.save( function( err, post )
+    {
+        if ( err )
+        {
+            return next( err );
+        }
+
+        // adding actual comment to the parent's list of comments
+        req.post.comments.push( comment );
+        
+        // and saving the post as well
+        req.post.save( function( err, post )
+        {
+            if ( err )
+            {
+                return next( err );
+            }
+            
+            res.json( comment );
+        });
+        
+    });
+});
 
 
 module.exports = router;
