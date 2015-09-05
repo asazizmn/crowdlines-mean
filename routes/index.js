@@ -89,7 +89,7 @@ router.param( 'post', function( req, res, next, id )
       
         if ( !post )
         {
-            return next( new Error( 'can\'t finf post' ));
+            return next( new Error( 'can\'t find post' ));
         }
       
         req.post = post;
@@ -161,6 +161,45 @@ router.post( '/posts/:post/comments', function( req, res, next )
             res.json( comment );
         });
         
+    });
+});
+
+
+/* Express's param method to help pre-load the appropriate comment */
+router.param( 'comment', function( req, res, next, id )
+{
+    // mongoose's query interface (http://mongoosejs.com/docs/queries.html)
+    Post.findById( id ).exec( function( err, comment )
+    {
+        if ( err )
+        {
+            return next( err );
+        }
+      
+        if ( !comment )
+        {
+            return next( new Error( 'can\'t find comment' ));
+        }
+      
+        req.comment = comment;
+        return next();
+    });
+});
+
+
+/* Update the comment upvote count, using HTTP PUT */
+// please note how this route will firstly use the above param methods
+// to pre-load the appropriate post and comment given the ids
+router.put( '/posts/:post/comments/:comment/upvote', function( req, res, next )
+{
+    req.comment.upvote( function( err, comment )
+    {
+        if ( err )
+        {
+            return next( err );
+        };
+        
+        res.json( comment );
     });
 });
 
