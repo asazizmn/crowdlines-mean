@@ -46,7 +46,7 @@ app.config
                     resolve:
                     {
                         // handle/name of dependency, and function return to be preloaded
-                        postPromise: function( posts )
+                        promisePost: function( posts )
                         {
                             return posts.getAll();
                         }
@@ -114,14 +114,34 @@ app.factory
         };
         
         
-        // creat a new post
+        // create a new post
+        // please note that the actual data is saved at the backend only as a result
+        // of the call '$http.post( '/posts', post )', however this only saves in the backend
+        // and does not update the frontend straightaway... hence we make a push here as well
         service.create = function( post )
         {
             return $http.post( '/posts', post ).success( function( data )
             {
                 // once the data is saved using the rest api
-                // push it on to the list of posts to be displayed
+                // push it on to the list of posts for immediate display purposes
                 service.posts.push( data );
+            });
+        };
+        
+        
+        // post upvote
+        // please note that the vote is actually increased at the backend when 
+        // executing the url, however for immediate changes we also update the front-end here
+        // so that it appears the changes are immediate... however, when refreshing the page,
+        // the backend version will be used
+        service.upvote = function( post )
+        {
+            // call the rest api to upvote this post in the db
+            // and then upon success execute the provided callback function
+            return $http.put( '/posts/' + post._id + '/upvote' ).success( function( data ) 
+            {
+                // increase the upvotes number
+                post.upvotes += 1;
             });
         };
         
@@ -210,7 +230,7 @@ app.controller
         // we are retrieving a reference directly to the post to be updated
         $scope.upTheVotes = function( post )
         {
-            post.upvotes += 1;
+            posts.upvote( post );
         };
     } 
 );
