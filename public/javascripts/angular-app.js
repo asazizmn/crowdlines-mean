@@ -94,18 +94,11 @@ app.factory
         // other properties and methods to this service object, if necessary
         var service = 
         {
-            posts: 
-            [
-//                { title: 'Post 1', link: '#', upvotes: 5, comments: [] },
-//                { title: 'Post 2', link: '#', upvotes: 2, comments: [] },
-//                { title: 'Post 3', link: '#', upvotes: 5, comments: [] },
-//                { title: 'Post 4', link: '#', upvotes: 9, comments: [] },
-//                { title: 'Post 5', link: '#', upvotes: 4, comments: [] }
-            ]
+            posts: []
         };
         
         
-        // method to retrieve all posts within this service object
+        // retrieve all posts, making use of the appropriate route defined (rest api)
         service.getAll = function()
         {
             // please note that '$http' is a core angular service
@@ -121,7 +114,7 @@ app.factory
         };
         
         
-        // method to allow creation of a new post, making use of the appropriate route defined (rest api)
+        // creat a new post
         service.create = function( post )
         {
             return $http.post( '/posts', post ).success( function( data )
