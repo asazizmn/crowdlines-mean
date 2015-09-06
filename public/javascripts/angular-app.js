@@ -39,7 +39,18 @@ app.config
                 {
                     url: '/home',
                     templateUrl: '/home.html',
-                    controller: 'MainCtrl'
+                    controller: 'MainCtrl',
+                    
+                    // belongs to ui-router and is used to execute code before 
+                    // the state is successfully loaded
+                    resolve:
+                    {
+                        // handle/name of dependency, and function return to be preloaded
+                        postPromise: function( posts )
+                        {
+                            return posts.getAll();
+                        }
+                    }
                 }
             )
 
@@ -75,8 +86,9 @@ app.factory
 ( 
     // factory ID
     'posts',
-    function() 
+    function( $http ) 
     {
+        // this variable represents the post service/factory
         // please note that we could have simply return posts,
         // however, by creating an object (containing the array) first, it will allow us to add 
         // other properties and methods to this service object, if necessary
@@ -84,12 +96,40 @@ app.factory
         {
             posts: 
             [
-                { title: 'Post 1', link: '#', upvotes: 5, comments: [] },
-                { title: 'Post 2', link: '#', upvotes: 2, comments: [] },
-                { title: 'Post 3', link: '#', upvotes: 5, comments: [] },
-                { title: 'Post 4', link: '#', upvotes: 9, comments: [] },
-                { title: 'Post 5', link: '#', upvotes: 4, comments: [] }
+//                { title: 'Post 1', link: '#', upvotes: 5, comments: [] },
+//                { title: 'Post 2', link: '#', upvotes: 2, comments: [] },
+//                { title: 'Post 3', link: '#', upvotes: 5, comments: [] },
+//                { title: 'Post 4', link: '#', upvotes: 9, comments: [] },
+//                { title: 'Post 5', link: '#', upvotes: 4, comments: [] }
             ]
+        };
+        
+        
+        // method to retrieve all posts within this service object
+        service.getAll = function()
+        {
+            // please note that '$http' is a core angular service
+            // that allows communication with the remote HTTP servers via XMLHttpRequest
+            // other moethod include $http.post, $http.put etc
+            // https://docs.angularjs.org/api/ng/service/$http
+            return $http.get( '/posts' ).success( function( data )
+            {
+                // performs a deep copy of the return 'data' into the 'service.posts' created above
+                // this ensures that the $scope.posts variable in MainCtrl will also be updated
+                angular.copy( data, service.posts ); 
+            });
+        };
+        
+        
+        // method to allow creation of a new post, making use of the appropriate route defined (rest api)
+        service.create = function( post )
+        {
+            return $http.post( '/posts', post ).success( function( data )
+            {
+                // once the data is saved using the rest api
+                // push it on to the list of posts to be displayed
+                service.posts.push( data );
+            });
         };
         
         return service;
@@ -148,16 +188,17 @@ app.controller
                 $scope.link = '#';
             }
             
-            // this simple adds a new post with hardcoded values
-            // $scope.posts.push( { title: 'A new post!', upvotes: 0 } );
-            
             // $scope.title, $scope.link allow the form bounded values to be accessed here
-            $scope.posts.push
+            // and passed to the 'create' factory method, which uses the relevant rest api to save it
+            posts.create
             ({ 
                 title: $scope.title, 
-                link: $scope.link, 
-                upvotes: 0,
-                comments: []
+                link: $scope.link
+                
+                  // please note that these are no longer required,
+                  // as the default values within the PostSchema and CommentSchema are used instead
+//                upvotes: 0,
+//                comments: []
             });
             
             // and this will allow the bound title input to be cleared at this point
