@@ -161,7 +161,7 @@ app.factory
         // executing the url, however for immediate changes we also update the front-end here
         // so that it appears the changes are immediate... however, when refreshing the page,
         // the backend version will be used
-        service.upvote = function( post )
+        service.upvotePost = function( post )
         {
             // call the rest api to upvote this post in the db
             // and then upon success execute the provided callback function
@@ -196,8 +196,9 @@ app.factory
             return $http.post( '/posts/' + id + '/comments', comment );
         };
         
+        
         // increment the comment votes
-        service.upTheVotes = function( post, comment )
+        service.upvoteComment = function( post, comment )
         {
             return $http.put( '/posts/' + post._id + '/comments/' + comment._id + '/upvote' ).success( function( data )
             {
@@ -288,9 +289,9 @@ app.controller
         // 2. traversing the entire array and
         // 3. then finally updating the count
         // we are retrieving a reference directly to the post to be updated
-        $scope.upTheVotes = function( post )
+        $scope.upvotePost = function( post )
         {
-            posts.upvote( post );
+            posts.upvotePost( post );
         };
     } 
 );
@@ -373,9 +374,9 @@ app.controller
             $scope.comment = '';
         };
         
-        $scope.upTheVotes = function( comment )
+        $scope.upvoteComment = function( comment )
         {
-            posts.upTheVotes( post, comment );
+            posts.upvoteComment( post, comment );
         };
     }
 );

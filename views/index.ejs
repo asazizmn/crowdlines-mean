@@ -62,7 +62,7 @@
                 
                 <!-- passing back a direct reference to the post in relevance -->
                 <div class="inline-block meta-info" style="width: 14%">
-                    <span class="glyphicon glyphicon-thumbs-up" ng-click="upTheVotes( post )"></span>
+                    <span class="glyphicon glyphicon-thumbs-up" ng-click="upvotePost( post )"></span>
                     {{ post.upvotes }}
                 </div>
                 
@@ -100,7 +100,7 @@
 
             <div ng-repeat="comment in post.comments | orderBy: '-upvotes'">
 
-                <span class="glyphicon glyphicon-thumbs-up" ng-click="upTheVotes( comment )"></span>
+                <span class="glyphicon glyphicon-thumbs-up" ng-click="upvoteComment( comment )"></span>
                 {{ comment.upvotes }} - by {{ comment.author }}
 
                 <span style="font-size: 20px; margin-left: 10px;">

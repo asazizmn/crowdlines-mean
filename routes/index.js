@@ -129,7 +129,7 @@ router.put( '/posts/:post/upvote', function( req, res, next )
         if ( err )
         {
             return next( err );
-        };
+        }
         
         res.json( post );
     });
@@ -181,7 +181,7 @@ router.post( '/posts/:post/comments', function( req, res, next )
 router.param( 'comment', function( req, res, next, id )
 {
     // mongoose's query interface (http://mongoosejs.com/docs/queries.html)
-    Post.findById( id ).exec( function( err, comment )
+    Comment.findById( id ).exec( function( err, comment )
     {
         if ( err )
         {
@@ -210,7 +210,7 @@ router.put( '/posts/:post/comments/:comment/upvote', function( req, res, next )
         if ( err )
         {
             return next( err );
-        };
+        }
         
         res.json( comment );
     });
