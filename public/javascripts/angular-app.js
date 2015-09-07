@@ -121,6 +121,10 @@ app.factory
         };
         
         
+        //
+        // actual post related
+        //
+        
         // retrieve all posts, making use of the appropriate route defined (rest api)
         service.getAll = function()
         {
@@ -130,14 +134,9 @@ app.factory
             // https://docs.angularjs.org/api/ng/service/$http
             return $http.get( '/posts' ).success( function( data )
             {
-//                console.log(service.posts)
-                
                 // performs a deep copy of the return 'data' into the 'service.posts' created above
                 // this ensures that the $scope.posts variable in MainCtrl will also be updated
                 angular.copy( data, service.posts ); 
-                
-//                console.log(data)
-//                console.log(service.posts)
             });
         };
         
@@ -185,6 +184,17 @@ app.factory
             });
         };
         
+        
+        //
+        // post comment related
+        //
+        
+        // add comment to post with given id
+        service.addComment = function( id, comment )
+        {
+            // send data 'comment' to the url provided
+            return $http.post( '/posts/' + id + '/comments', comment );
+        };
         
         return service;
     }
@@ -333,14 +343,22 @@ app.controller
                 return;
             }
             
+            posts
             
-            // push the actual comment onto the array of $scope.post.comments
-            $scope.post.comments.push
-            ({ 
-                body: $scope.comment, 
-                author: 'Joe', 
-                upvotes: 0
-            });
+                // try to add comment using the service factory method 'addComment'
+                .addComment( post._id,
+                {
+                    body: $scope.comment,
+                    author: 'user'
+                })
+            
+                // and upon sucsess
+                .success( function( comment )
+                {
+                    // ensure that the view is updated real-time
+                    $scope.post.comments.push( comment );
+                });
+            
             
             // to clear field after submission
             $scope.comment = '';
