@@ -196,6 +196,15 @@ app.factory
             return $http.post( '/posts/' + id + '/comments', comment );
         };
         
+        // increment the comment votes
+        service.upTheVotes = function( post, comment )
+        {
+            return $http.put( '/posts/' + post._id + '/comments/' + comment._id + '/upvote' ).success( function( data )
+            {
+                comment.upvotes += 1;
+            });
+        };
+        
         return service;
     }
 );
@@ -273,7 +282,7 @@ app.controller
         
         
         // defines the functionality to allow incrementing the upvotes,
-        // everytime the 'up arrow' is clicked
+        // everytime the 'thumb' is clicked
         // please note however that instead of 
         // 1. passing back the index number and 
         // 2. traversing the entire array and
@@ -366,7 +375,7 @@ app.controller
         
         $scope.upTheVotes = function( comment )
         {
-            comment.upvotes += 1;
+            posts.upTheVotes( post, comment );
         };
     }
 );
