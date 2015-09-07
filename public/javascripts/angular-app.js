@@ -46,7 +46,9 @@ app.config
                     resolve:
                     {
                         // handle/name of dependency, and function return to be preloaded
-                        posts: function( posts )
+                        // please ensure that the handle name here is something other than the factory handle/name
+                        // otherwise it becomes difficult for angularjs ot differntiate between the two
+                        postPromise: function( posts )
                         {
                             return posts.getAll();
                         }
@@ -108,7 +110,14 @@ app.factory
         // other properties and methods to this service object, if necessary
         var service = 
         {
-            posts: []
+            posts: 
+            [
+//                { title: "Post 1", link: "#", upvotes: 5, comments: [] },
+//                { title: "Post 2", link: "#", upvotes: 2, comments: [] },
+//                { title: "Post 3", link: "#", upvotes: 5, comments: [] },
+//                { title: "Post 4", link: "#", upvotes: 9, comments: [] },
+//                { title: "Post 5", link: "#", upvotes: 4, comments: [] }
+            ]
         };
         
         
@@ -121,9 +130,14 @@ app.factory
             // https://docs.angularjs.org/api/ng/service/$http
             return $http.get( '/posts' ).success( function( data )
             {
+//                console.log(service.posts)
+                
                 // performs a deep copy of the return 'data' into the 'service.posts' created above
                 // this ensures that the $scope.posts variable in MainCtrl will also be updated
                 angular.copy( data, service.posts ); 
+                
+//                console.log(data)
+//                console.log(service.posts)
             });
         };
         
