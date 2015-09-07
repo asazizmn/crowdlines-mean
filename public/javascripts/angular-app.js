@@ -46,7 +46,7 @@ app.config
                     resolve:
                     {
                         // handle/name of dependency, and function return to be preloaded
-                        promisePost: function( posts )
+                        posts: function( posts )
                         {
                             return posts.getAll();
                         }
@@ -63,7 +63,21 @@ app.config
                     // also known as the route 'parameter', it can alternatively be written as "/post/:id"
                     url: '/posts/{id}',
                     templateUrl: '/posts.html',
-                    controller: 'PostsCtrl'
+                    controller: 'PostsCtrl',
+                    
+                    // so when this page is requested in thr browser,
+                    // angular ui-router will then automatically query the server for the post using the following
+                    // only once the following request has returned then will the page finish loading
+                    resolve:
+                    {
+                        post: function( $stateParams, posts )
+                        {
+                            // please note that this will be automatically injected into the 'PostCtrl'
+                            // hence within the PostsCtrl there is no need to go through something like
+                            // '$scope.post = posts.posts[ $stateParams.id ];', as we already have the exact object here
+                            return posts.get( $stateParams.id );
+                        }
+                    }
                 }
             );
             
@@ -144,6 +158,19 @@ app.factory
                 post.upvotes += 1;
             });
         };
+        
+        
+        // retrieve single post, to allow for comments viewing
+        // please note that instead of 'success' we have used 'then' which is a 'promise'?
+        // success vs then?
+        service.get = function( id )
+        {
+            return $http.get( '/posts/' + id ).then( function( res )
+            {
+                return res.data;
+            });
+        };
+        
         
         return service;
     }
@@ -269,18 +296,19 @@ app.controller
 (
     'PostsCtrl',
     
-    // apart from $scope, we want to be able to access...
-    // ... post id using '$stateParams'
-    // ... 'posts' factory service object
-    function( $scope, $stateParams, posts )
+    // apart from $scope, we want to be able to access:
+    // - 'posts' factory service object to gain access to the method for manipulating comments !!!!!!
+    // please note that PostsCtrl here is being wired to the same factory service object
+    // as used in the 'MainCtrl'. This is the benefit of using factory service,
+    // previously the 'posts' was defined within 'MainCtrl' and non-reusable
+    // - 'post' object (figured out in ui-route resolve) directly injected into this function
+    function( $scope, posts, post )
     {
-        // for now the post index will be used as the ID
-        // and used to grab the appropriate post from the factory service object 
-        // and used to newly create a 'post' object within $scope
-        // please note that 'posts.posts' here is being wired to the same factory service object
-        // as used in the 'MainCtrl'. This is the benefit of using factory service,
-        // previously the 'posts' was defined within 'MainCtrl' and non-reusable
-        $scope.post = posts.posts[ $stateParams.id ];
+        // please note that we could have injected '$stateParams' and accessed post like this
+        // $scope.post = posts.posts[ $stateParams.id ];
+
+        // but that is not necessary as we are now receiving the post directly
+        $scope.post = post;
         
         // function to handle adding of comment
         $scope.addComment = function()
