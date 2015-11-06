@@ -47,7 +47,7 @@ app.config
                     {
                         // handle/name of dependency, and function return to be preloaded
                         // please ensure that the handle name here is something other than the factory handle/name
-                        // otherwise it becomes difficult for angularjs ot differntiate between the two
+                        // otherwise it becomes difficult for angularjs to differntiate between the two
                         postPromise: function( posts )
                         {
                             return posts.getAll();
@@ -130,7 +130,7 @@ app.factory
         {
             // please note that '$http' is a core angular service
             // that allows communication with the remote HTTP servers via XMLHttpRequest
-            // other moethod include $http.post, $http.put etc
+            // other methods include $http.post, $http.put etc
             // https://docs.angularjs.org/api/ng/service/$http
             return $http.get( '/posts' ).success( function( data )
             {
@@ -218,7 +218,9 @@ app.factory
 
 // the business logic behind views
 
-// definition of the 'MainCtrl' controller, which is referenced within index.html
+// definition of the 'MainCtrl' controller, which used to be referenced within index.html
+// but now since the state (UI-Router) definition will load the appropriate controller,
+// index.html no longer needs to specify this
 app.controller
 (
     // controller ID
