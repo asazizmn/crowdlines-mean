@@ -67,7 +67,7 @@ app.config
                     templateUrl: '/posts.html',
                     controller: 'PostsCtrl',
                     
-                    // so when this page is requested in thr browser,
+                    // so when this page is requested in the browser,
                     // angular ui-router will then automatically query the server for the post using the following
                     // only once the following request has returned then will the page finish loading
                     resolve:
