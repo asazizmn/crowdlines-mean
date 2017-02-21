@@ -108,6 +108,12 @@ app.factory
         // please note that we could have simply return posts,
         // however, by creating an object (containing the array) first, it will allow us to add 
         // other properties and methods to this service object, if necessary
+        // 
+        // please note that although it is possible to deal directly with the API only and
+        // not have the following data model, it will prevent the display to be updated instantly ...
+        // ... since for example if we add an item, it would have to make an API call save at the backend and then ...
+        // ... make another API call to retrieve everything before displaying. However, in this case, 
+        // we can simply declare a data model, tie it to the front-end and update it as well as the back-end for instant results
         var service = 
         {
             posts: 
