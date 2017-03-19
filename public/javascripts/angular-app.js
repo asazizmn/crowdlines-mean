@@ -50,6 +50,9 @@ app.config
                         // otherwise it becomes difficult for angularjs to differntiate between the two
                         postPromise: function( posts )
                         {
+                            // please note that although 'postPromise' is not being directly used in the controller
+                            // the call 'posts.getAll()' is populating the model in the service class,
+                            // which in return also updated the controller model
                             return posts.getAll();
                         }
                     }
@@ -272,6 +275,8 @@ app.controller
             
             // $scope.title, $scope.link allow the form bounded values to be accessed here
             // and passed to the 'create' factory method, which uses the relevant rest api to save it
+            // also please note that on creating a new post, '$scope.posts' is not direclty updated here
+            // but instead since '$scope.posts = posts' and 'posts' is updated, so is '$scope.posts' automatically
             posts.create
             ({ 
                 title: $scope.title, 
